@@ -1,17 +1,19 @@
-#include <stdio.h>
+#include <gloomy/gloomy.h>
 
-#include <GLFW/glfw3.h>
+#define WINDOW_WIDTH 1280
+#define WINDOW_HEIGHT 720
+#define WINDOW_TITLE "Gloomy"
 
 int main(int argc, char** argv)
 {
     GLFWwindow* window;
 
     /* Initialize the library */
-    if (!glfwInit())
+    if (!glmyInit())
         return -1;
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -20,6 +22,8 @@ int main(int argc, char** argv)
 
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
+
+    glClearColor(1.f, 0.f, 0.f, 1.f);
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
