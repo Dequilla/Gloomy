@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 
 #include <gloomy/utility.h>
+#include <gloomy/config.h>
 
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
@@ -17,6 +18,7 @@ typedef struct {
 
 typedef struct {
     GLMY_Window* window;
+    GLMY_Config* config;
 } GLMY_App;
 
 

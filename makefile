@@ -37,6 +37,12 @@ run: clean all
 	@read _temp_
 	./$(BUILD_DIR)/$(PROGRAM)
 
+test: FLAGS += -D_TEST_
+test: clean all
+	@echo "Press enter to continue"
+	@read _temp_
+	./$(BUILD_DIR)/$(PROGRAM)
+
 release: FLAGS += -g0 -O3
 release: clean all
 

@@ -1,9 +1,19 @@
 #include <gloomy/gloomy.h>
 
+#ifdef _TEST_
+#include <test/test_main.h>
+#endif
 
 int main(int argc, char** argv)
 {
+#ifdef _TEST_
+    
+    // Test
+    return test_main(argc, argv);
 
+#else
+
+    // Main
     GLMY_App* app = glmyInit();
     if (!app)
         return -1;
@@ -26,4 +36,6 @@ int main(int argc, char** argv)
 
     glmyExit(app);
     return 0;
+
+#endif
 }
