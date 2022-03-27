@@ -1,43 +1,29 @@
 #include <gloomy/gloomy.h>
 
-#define WINDOW_WIDTH 1280
-#define WINDOW_HEIGHT 720
-#define WINDOW_TITLE "Gloomy"
 
 int main(int argc, char** argv)
 {
-    GLFWwindow* window;
 
-    /* Initialize the library */
-    if (!glmyInit())
+    GLMY_App* app = glmyInit();
+    if (!app)
         return -1;
 
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        return -1;
-    }
-
-    /* Make the window's context current */
-    glfwMakeContextCurrent(window);
-
+    // Red clear color to see it working
     glClearColor(1.f, 0.f, 0.f, 1.f);
 
     /* Loop until the user closes the window */
-    while (!glfwWindowShouldClose(window))
+    while (!glfwWindowShouldClose(app->window->instance))
     {
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 
         /* Swap front and back buffers */
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(app->window->instance);
 
         /* Poll for and process events */
         glfwPollEvents();
     }
 
-    glfwTerminate();
+    glmyExit(app);
     return 0;
 }

@@ -1,22 +1,26 @@
 #ifndef __GLMY_GLOOMY_H__
 #define __GLMY_GLOOMY_H__
 
+#include <stdlib.h>
+
 #include <GLFW/glfw3.h>
 
 #include <gloomy/utility.h>
 
+#define WINDOW_WIDTH 1280
+#define WINDOW_HEIGHT 720
+#define WINDOW_TITLE "Gloomy"
 
-GLMY_BOOL glmyInit()
-{
-    if(!glfwInit())
-        return GLMY_FALSE;
+typedef struct {
+    GLFWwindow* instance;
+} GLMY_Window;
 
-    return GLMY_TRUE;
-}
+typedef struct {
+    GLMY_Window* window;
+} GLMY_App;
 
-void glmyExit()
-{
-    glfwTerminate();
-}
+
+GLMY_App* glmyInit();
+void glmyExit(GLMY_App* app);
 
 #endif
