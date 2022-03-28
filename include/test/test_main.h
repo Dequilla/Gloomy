@@ -8,7 +8,7 @@
 int GLMY_TestMain(int argc, char** argv)
 {
     int result = GLMY_Test_HashMap();
-    printf("Test HashMap: %d\n", result);
+    printf(" -> HashMap: %s\n", result ? "Success" : "Failed");
     
     return 0;
 }
