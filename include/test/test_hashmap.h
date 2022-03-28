@@ -8,7 +8,7 @@
 
 int GLMY_Test_HashMap()
 {
-    puts("--- Test HashMap Start ---");
+    puts(" --- Test HashMap Start --- ");
    
 
 
@@ -20,7 +20,7 @@ int GLMY_Test_HashMap()
 
 
 
-    puts("--- Test HashMap Start ---");
+    puts(" ---  Test HashMap End  --- ");
     return 1;
 }
 
