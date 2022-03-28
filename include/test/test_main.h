@@ -3,9 +3,13 @@
 
 #include <stdio.h>
 
-int test_main(int argc, char** argv)
+#include <test/test_hashmap.h>
+
+int GLMY_TestMain(int argc, char** argv)
 {
-    puts("This is the test suite!");
+    int result = GLMY_Test_HashMap();
+    printf("Test HashMap: %d\n", result);
+    
     return 0;
 }
 

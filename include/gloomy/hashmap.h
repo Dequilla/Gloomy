@@ -12,6 +12,7 @@
 
 // Function pointer of hash function
 typedef size_t (*HashFunc)(void*);
+size_t GLMY_HashMapHashStringDefault(void* data);
 
 typedef struct {
     size_t hash;

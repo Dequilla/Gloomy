@@ -25,6 +25,8 @@ OBJ=$(subst .c,.o,$(subst $(SRC_DIR)/,$(OBJ_DIR)/,$(SRC)))
 default_target: run
 .PHONY : default_target
 
+#--------------------
+# Normal builds start
 debug: FLAGS += -DDEBUG -g3 -O0 
 debug: clean all
 	@echo "Press enter to continue"
@@ -37,14 +39,27 @@ run: clean all
 	@read _temp_
 	./$(BUILD_DIR)/$(PROGRAM)
 
+release: FLAGS += -g0 -O3
+release: clean all
+# Normal builds end
+#------------------
+
+#------------------
+# Test builds start
 test: FLAGS += -D_TEST_
 test: clean all
 	@echo "Press enter to continue"
 	@read _temp_
 	./$(BUILD_DIR)/$(PROGRAM)
 
-release: FLAGS += -g0 -O3
-release: clean all
+dtest: FLAGS += -DDEBUG -g3 -O0 -D_TEST_
+dtest: clean all
+	@echo "Press enter to continue"
+	@read _temp_
+	gdb -tui $(BUILD_DIR)/$(PROGRAM)
+# Test builds end
+#------------------
+
 
 #---------------
 # Steps
