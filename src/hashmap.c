@@ -31,3 +31,14 @@ GLMY_HashMap* GLMY_HashMapCreate(size_t capacity, HashFunc hashFunc)
 
     return map;
 }
+
+void GLMY_HashMapDelete(GLMY_HashMap* map)
+{
+    if(map)
+    {
+        free(map->buckets);
+        map->calcHash = NULL;
+        free(map);
+    }
+}
+

@@ -4,16 +4,13 @@
 #include <stdio.h>
 
 #include <test/test_hashmap.h>
+#include <test/test_utility.h>
 
 int GLMY_TestMain(int argc, char** argv)
 {
     int result = GLMY_Test_HashMap();
 
-
-    puts("\n\n");
-    puts(" -------------------- ");
-    puts(" --- Test Results --- ");
-
+    GLMY_TestSection("Test Results");
     printf(" HashMap: %s\n", result ? "Success" : "Failed");
     
     return 0;

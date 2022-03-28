@@ -6,21 +6,38 @@
 #include <gloomy/hashmap.h>
 #include <gloomy/time.h>
 
+#include <test/test_utility.h>
+
 int GLMY_Test_HashMap()
 {
-    puts(" --- Test HashMap Start --- ");
-   
+    GLMY_TestSection("Hash Map");
 
-
+    GLMY_TestSubSection("Creating 1000x100");
     GLMY_TimePrec start = GLMY_TimePrecProcessNow();
-    GLMY_HashMap* map = GLMY_HashMapCreate(100, &GLMY_HashMapHashStringDefault);
+
+    size_t count = 0;
+    for(; count < 1000; count++)
+    {
+        GLMY_HashMap* map = GLMY_HashMapCreate(100, &GLMY_HashMapHashStringDefault);
+        GLMY_HashMapDelete(map);
+    }
+
     GLMY_TimePrec end = GLMY_TimePrecProcessNow();
+    printf("Result: %fms\n\n", GLMY_TimePrecToMilliseconds(GLMY_TimePrecDiff(start, end))); 
 
-    printf("Creating HashMap took: %fms\n", GLMY_TimePrecToMilliseconds(GLMY_TimePrecDiff(start, end))); 
+    GLMY_TestSubSection("Creating 1000x100000");
+    start = GLMY_TimePrecProcessNow();
 
+    count = 0;
+    for(; count < 1000; count++)
+    {
+        GLMY_HashMap* map = GLMY_HashMapCreate(100000, &GLMY_HashMapHashStringDefault);
+        GLMY_HashMapDelete(map);
+    }
 
+    end = GLMY_TimePrecProcessNow();
+    printf("Result: %fms\n\n", GLMY_TimePrecToMilliseconds(GLMY_TimePrecDiff(start, end)));
 
-    puts(" ---  Test HashMap End  --- ");
     return 1;
 }
 

@@ -31,5 +31,7 @@ typedef struct {
 
 GLMY_HashMap* GLMY_HashMapCreate(size_t capacity, HashFunc hashFunc);
 
+void GLMY_HashMapDelete(GLMY_HashMap* map);
+
 
 #endif
