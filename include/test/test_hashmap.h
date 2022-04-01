@@ -18,7 +18,8 @@ int GLMY_Test_HashMap()
     size_t count = 0;
     for(; count < 1000; count++)
     {
-        GLMY_HashMap* map = GLMY_HashMapCreate(100, &GLMY_HashMapHashStringDefault);
+        GLMY_HashMap* map = GLMY_HashMapCreate(100, &GLMY_HashMapHashStringDefault, &GLMY_HashMapCmpStringDefault);
+        GLMY_HashMapInsert(map, "Test", "Value!");
         GLMY_HashMapDelete(map);
     }
 
@@ -31,7 +32,7 @@ int GLMY_Test_HashMap()
     count = 0;
     for(; count < 1000; count++)
     {
-        GLMY_HashMap* map = GLMY_HashMapCreate(100000, &GLMY_HashMapHashStringDefault);
+        GLMY_HashMap* map = GLMY_HashMapCreate(100000, &GLMY_HashMapHashStringDefault, &GLMY_HashMapCmpStringDefault);
         GLMY_HashMapDelete(map);
     }
 
