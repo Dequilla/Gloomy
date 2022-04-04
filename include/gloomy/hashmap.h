@@ -13,6 +13,8 @@ size_t GLMY_HashMapHashStringDefault(void* data);
 typedef bool (*KeyCmp)(void*, void*);
 bool GLMY_HashMapCmpStringDefault(void* keyLeft, void* keyRight);
 
+size_t GLMY_HashMapCalcProbeIndex(size_t hash, size_t index, size_t capacity);
+
 typedef struct {
     size_t hash;
 
@@ -36,6 +38,8 @@ void GLMY_HashMapDelete(GLMY_HashMap* map);
 GLMY_HashMapBucket* GLMY_HashMapInsert(GLMY_HashMap* map, void* key, void* value);
 
 void* GLMY_HashMapGet(GLMY_HashMap* map, void* key);
+
+bool GLMY_HashMapErase(GLMY_HashMap* map, void* key);
 
 GLMY_HashMapBucket* GLMY_HashMapAt(GLMY_HashMap* map, size_t index);
 
