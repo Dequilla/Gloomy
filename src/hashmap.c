@@ -20,7 +20,7 @@ bool GLMY_HashMapCmpStringDefault(void* keyLeft, void* keyRight)
     return 0 == strcmp(keyLeft, keyRight);
 }
 
-GLMY_HashMap* GLMY_HashMapCreate(size_t capacity, HashCalc hashFunc, HashCmp cmpHash)
+GLMY_HashMap* GLMY_HashMapCreate(size_t capacity, HashCalc hashFunc, KeyCmp cmpKey)
 {
     GLMY_HashMap* map = (GLMY_HashMap*)calloc(sizeof(GLMY_HashMap), 1);
     if(map == NULL) return NULL;
@@ -33,7 +33,7 @@ GLMY_HashMap* GLMY_HashMapCreate(size_t capacity, HashCalc hashFunc, HashCmp cmp
     }
 
     map->calcHash = hashFunc;
-    map->cmpHash = cmpHash;
+    map->cmpKey = cmpKey;
     map->capacity = capacity;
     map->count = 0;
 
@@ -46,38 +46,78 @@ void GLMY_HashMapDelete(GLMY_HashMap* map)
     {
         free(map->buckets);
         map->calcHash = NULL;
-        map->cmpHash = NULL;
+        map->cmpKey = NULL;
         free(map);
     }
 }
 
-void* GLMY_HashMapInsert(GLMY_HashMap* map, void* key, void* value)
+GLMY_HashMapBucket* GLMY_HashMapInsert(GLMY_HashMap* map, void* key, void* value)
 {
-    if(map->capacity <= map->count)
+    if(!key || !value || !map) 
         return NULL;
 
-    if(!key || !value) 
+    // TODO: Resize
+    if(map->capacity <= map->count)
         return NULL;
 
     size_t hash = map->calcHash(key);
 
     size_t index = 0,
-           probeIndex = 0;
+           probeIndex = hash % map->capacity;
 
-    while(map->cmpHash(map->buckets[probeIndex].key, key))
+    if(map->cmpKey(map->buckets[probeIndex].key, key))
+        return NULL;
+
+    while(map->buckets[probeIndex].key != NULL)
     {
-        // Quadratic probing for finding open spot if hash is not available
-        // Basically index = Mod(Hash(x) + i^2, capacity)
-        index += 1;
-        probeIndex = map->capacity % (hash + probeIndex * probeIndex);
+        if((index += 1) >= map->capacity)
+            return NULL;
+
+        probeIndex = (hash + index) % map->capacity;
+
+        if(map->cmpKey(map->buckets[probeIndex].key, key))
+            return NULL;
     }
 
-    GLMY_HashMapBucket bucket = map->buckets[probeIndex];
-    bucket.hash = hash;
-    bucket.key = key;
-    bucket.value = value;
+    GLMY_HashMapBucket* bucket = &(map->buckets[probeIndex]);
+    bucket->hash = hash;
+    bucket->key = key;
+    bucket->value = value;
 
     map->count += 1;
+
+    return bucket;
 }
 
+void* GLMY_HashMapGet(GLMY_HashMap* map, void* key)
+{
+    if(!map || !key || map->count <= 0)
+        return NULL;
+
+    size_t hash = map->calcHash(key);
+
+    size_t index = 0,
+           probeIndex = hash % map->capacity;
+
+    while(!map->cmpKey(map->buckets[probeIndex].key, key))
+    {
+        if((index += 1) >= map->capacity)
+            return NULL;
+
+        probeIndex = (hash + index) % map->capacity;
+    }
+
+    return map->buckets[probeIndex].value;
+}
+
+GLMY_HashMapBucket* GLMY_HashMapAt(GLMY_HashMap* map, size_t index)
+{
+    if(!map) 
+        return NULL;
+
+    if(index >= map->capacity)
+        return NULL;
+
+    return &map->buckets[index];
+}
 

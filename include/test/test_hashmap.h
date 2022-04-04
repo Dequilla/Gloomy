@@ -6,40 +6,67 @@
 #include <gloomy/hashmap.h>
 #include <gloomy/time.h>
 
-#include <test/test_utility.h>
+#include <test/utility.h>
 
 int GLMY_Test_HashMap()
 {
-    GLMY_TestSection("Hash Map");
+    int fails = 0;
 
-    GLMY_TestSubSection("Creating 1000x100");
-    GLMY_TimePrec start = GLMY_TimePrecProcessNow();
+    GLMY_TimePrec start,
+                  end;
 
-    size_t count = 0;
-    for(; count < 1000; count++)
+    char* key[] = {"One", "Two", "Three", "Four", "Five", "Six", "Seven"};
+    char* value = "Itsa me!";
+
+    //////////////////////////
+    // Create 
+    GLMY_TestSubSection("Create");
+    start = GLMY_TimePrecProcessNow();
+    GLMY_HashMap* map = GLMY_HashMapCreate(7, &GLMY_HashMapHashStringDefault, &GLMY_HashMapCmpStringDefault);
+    if(!map) 
     {
-        GLMY_HashMap* map = GLMY_HashMapCreate(100, &GLMY_HashMapHashStringDefault, &GLMY_HashMapCmpStringDefault);
-        GLMY_HashMapInsert(map, "Test", "Value!");
-        GLMY_HashMapDelete(map);
+        printf("Error: Could not create map.\n");
+        fails += 1;
     }
-
-    GLMY_TimePrec end = GLMY_TimePrecProcessNow();
-    printf("Result: %fms\n\n", GLMY_TimePrecToMilliseconds(GLMY_TimePrecDiff(start, end))); 
-
-    GLMY_TestSubSection("Creating 1000x100000");
+    end = GLMY_TimePrecProcessNow();
+    printf("Result: %fms\n\n", GLMY_TimePrecToMilliseconds(GLMY_TimePrecDiff(start, end)));
+   
+    //////////////////////////
+    // Insert 
+    GLMY_TestSubSection("Insert");
     start = GLMY_TimePrecProcessNow();
 
-    count = 0;
-    for(; count < 1000; count++)
+    size_t c = 0;
+    for(; c < map->capacity; c++)
     {
-        GLMY_HashMap* map = GLMY_HashMapCreate(100000, &GLMY_HashMapHashStringDefault, &GLMY_HashMapCmpStringDefault);
-        GLMY_HashMapDelete(map);
+        GLMY_HashMapBucket* bucket = GLMY_HashMapInsert(map, key[c], value);
+        if(!bucket)
+        {
+            printf("Error: Could not insert (key: %s, value: %s)\n", key[c], value);
+            fails += 1;
+        }
     }
 
     end = GLMY_TimePrecProcessNow();
     printf("Result: %fms\n\n", GLMY_TimePrecToMilliseconds(GLMY_TimePrecDiff(start, end)));
+    
+    //////////////////////////
+    // Get 
+    GLMY_TestSubSection("Get");
+    start = GLMY_TimePrecProcessNow();
+    char* v = GLMY_HashMapGet(map, key[0]);
+    if(!v && strcmp(value, v) != 0) 
+    {
+        printf("Error: Could not get (key: %s)\n", key[0]);
+        fails += 1;
+    }
+    end = GLMY_TimePrecProcessNow();
+    printf("Result: %fms\n\n", GLMY_TimePrecToMilliseconds(GLMY_TimePrecDiff(start, end)));
+     
 
-    return 1;
+    GLMY_HashMapDelete(map);
+
+    return fails;
 }
 
 #endif
