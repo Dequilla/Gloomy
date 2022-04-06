@@ -1,6 +1,6 @@
 #include <gloomy/gloomy.h>
 
-GLMY_App* glmyInit()
+GLMY_App* GLMY_AppInit()
 {
     if(!glfwInit())
         return NULL;
@@ -8,14 +8,14 @@ GLMY_App* glmyInit()
     GLMY_App* app = (GLMY_App*)calloc(sizeof(GLMY_App), 1);
     if(app == NULL)
     {
-        glmyExit(app);
+        GLMY_AppExit(app);
         return NULL;
     }
 
     app->window = (GLMY_Window*)calloc(sizeof(GLMY_Window), 1);
     if(app->window == NULL)
     {
-        glmyExit(app);
+        GLMY_AppExit(app);
         return NULL;
     }
 
@@ -28,7 +28,7 @@ GLMY_App* glmyInit()
     );
     if(!app->window->instance)
     {
-        glmyExit(app);
+        GLMY_AppExit(app);
         return NULL;
     }
 
@@ -37,7 +37,7 @@ GLMY_App* glmyInit()
     return app;
 }
 
-void glmyExit(GLMY_App* app)
+void GLMY_AppExit(GLMY_App* app)
 {
     if(app && app->window && app->window->instance)
     {
@@ -55,7 +55,7 @@ void glmyExit(GLMY_App* app)
 int GLMY_Main(int argc, char** argv)
 {
     // Main
-    GLMY_App* app = glmyInit();
+    GLMY_App* app = GLMY_AppInit();
     if (!app)
         return -1;
 
@@ -75,7 +75,7 @@ int GLMY_Main(int argc, char** argv)
         glfwPollEvents();
     }
 
-    glmyExit(app);
+    GLMY_AppExit(app);
     return 0;
 }
 

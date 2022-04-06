@@ -95,10 +95,12 @@ GLMY_HashMapBucket* GLMY_HashMapInsert(GLMY_HashMap* map, void* key, void* value
     return bucket;
 }
 
-void* GLMY_HashMapGet(GLMY_HashMap* map, void* key)
+GLMY_Pair GLMY_HashMapGet(GLMY_HashMap* map, void* key)
 {
+    GLMY_Pair pair = { NULL, NULL };
+
     if(!map || !key || map->count <= 0)
-        return NULL;
+        return pair;
 
     size_t hash = map->calcHash(key);
 
@@ -108,12 +110,48 @@ void* GLMY_HashMapGet(GLMY_HashMap* map, void* key)
     while(!map->cmpKey(map->buckets[probeIndex].key, key))
     {
         if((index += 1) >= map->capacity)
-            return NULL;
+            return pair;
 
         probeIndex = GLMY_HashMapCalcProbeIndex(hash, index,  map->capacity);
     }
 
-    return map->buckets[probeIndex].value;
+    pair.key = map->buckets[probeIndex].key;
+    pair.value = map->buckets[probeIndex].value;
+
+    return pair;
+}
+
+GLMY_Pair GLMY_HashMapErase(GLMY_HashMap* map, void* key)
+{
+    GLMY_Pair pair = { NULL, NULL };
+
+    if(!map || !key || map->count <= 0)
+        return pair;
+
+    size_t hash = map->calcHash(key);
+
+    size_t index = 0,
+           probeIndex = GLMY_HashMapCalcProbeIndex(hash, index,  map->capacity);
+
+    while(!map->cmpKey(map->buckets[probeIndex].key, key))
+    {
+        if((index += 1) >= map->capacity)
+            return pair;
+
+        probeIndex = GLMY_HashMapCalcProbeIndex(hash, index,  map->capacity);
+    }
+    
+    GLMY_HashMapBucket* bucket = &map->buckets[probeIndex];
+    pair.key = bucket->key;
+    pair.value = bucket->value;
+
+    bucket->value = NULL;
+    bucket->key = NULL;
+    bucket->hash = 0;
+
+    map->count -= 1; 
+
+    return pair;
 }
 
 GLMY_HashMapBucket* GLMY_HashMapAt(GLMY_HashMap* map, size_t index)
@@ -127,23 +165,5 @@ GLMY_HashMapBucket* GLMY_HashMapAt(GLMY_HashMap* map, size_t index)
     return &map->buckets[index];
 }
 
-bool GLMY_HashMapErase(GLMY_HashMap* map, void* key)
-{
-    if(!map || !key || map->count <= 0)
-        return NULL;
 
-    size_t hash = map->calcHash(key);
-
-    size_t index = 0,
-           probeIndex = hash % map->capacity;
-
-    while(!map->cmpKey(map->buckets[probeIndex].key, key))
-    {
-        if((index += 1) >= map->capacity)
-            return NULL;
-
-        probeIndex = (hash + index) % map->capacity;
-    }
- 
-}
 

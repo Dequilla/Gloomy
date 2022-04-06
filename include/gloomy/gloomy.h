@@ -22,8 +22,8 @@ typedef struct {
 } GLMY_App;
 
 
-GLMY_App* glmyInit();
-void glmyExit(GLMY_App* app);
+GLMY_App* GLMY_AppInit();
+void GLMY_AppExit(GLMY_App* app);
 
 int GLMY_Main(int argc, char** argv);
 

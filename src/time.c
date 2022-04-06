@@ -4,8 +4,7 @@
 GLMY_TimePrec GLMY_TimePrecNow()
 {
    struct timespec now;
-   int result = clock_gettime(CLOCK_REALTIME, &now);
-   // TODO: Create error messaging system
+   clock_gettime(CLOCK_REALTIME, &now);
 
    GLMY_TimePrec time;
    time.s = (long)now.tv_sec;
@@ -17,8 +16,7 @@ GLMY_TimePrec GLMY_TimePrecNow()
 GLMY_TimePrec GLMY_TimePrecProcessNow()
 {
    struct timespec now;
-   int result = clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &now);
-   // TODO: Create error messaging system
+   clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &now);
 
    GLMY_TimePrec time;
    time.s = (long)now.tv_sec;
@@ -30,8 +28,7 @@ GLMY_TimePrec GLMY_TimePrecProcessNow()
 GLMY_TimePrec GLMY_TimePrecThreadNow()
 {
    struct timespec now;
-   int result = clock_gettime(CLOCK_THREAD_CPUTIME_ID, &now);
-   // TODO: Create error messaging system
+   clock_gettime(CLOCK_THREAD_CPUTIME_ID, &now);
 
    GLMY_TimePrec time;
    time.s = (long)now.tv_sec;

@@ -54,14 +54,19 @@ int GLMY_Test_HashMap()
     // Get 
     GLMY_TestSubSection("Get");
     start = GLMY_TimePrecProcessNow();
-    char* v = GLMY_HashMapGet(map, key[0]);
-    if(!v && strcmp(value, v) != 0) 
+    GLMY_Pair pair = GLMY_HashMapGet(map, key[0]);
+    if(!pair.key && strcmp(value, pair.value) != 0) 
     {
         printf("Error: Could not get (key: %s)\n", key[0]);
         fails += 1;
     }
     end = GLMY_TimePrecProcessNow();
     printf("Result: %fms\n\n", GLMY_TimePrecToMilliseconds(GLMY_TimePrecDiff(start, end)));
+
+    //////////////////////////
+    // Erase
+
+    // TODO
      
 
     GLMY_HashMapDelete(map);

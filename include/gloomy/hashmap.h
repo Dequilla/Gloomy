@@ -5,6 +5,8 @@
 #include <string.h>
 #include <stdbool.h>
 
+#include <gloomy/utility.h>
+
 // Function pointer of hash function
 typedef size_t (*HashCalc)(void*);
 size_t GLMY_HashMapHashStringDefault(void* data);
@@ -37,9 +39,9 @@ void GLMY_HashMapDelete(GLMY_HashMap* map);
 
 GLMY_HashMapBucket* GLMY_HashMapInsert(GLMY_HashMap* map, void* key, void* value);
 
-void* GLMY_HashMapGet(GLMY_HashMap* map, void* key);
+GLMY_Pair GLMY_HashMapGet(GLMY_HashMap* map, void* key);
 
-bool GLMY_HashMapErase(GLMY_HashMap* map, void* key);
+GLMY_Pair GLMY_HashMapErase(GLMY_HashMap* map, void* key);
 
 GLMY_HashMapBucket* GLMY_HashMapAt(GLMY_HashMap* map, size_t index);
 
