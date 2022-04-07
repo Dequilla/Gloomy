@@ -21,21 +21,16 @@ int GLMY_Test_HashMap()
     //////////////////////////
     // Create 
     GLMY_TestSubSection("Create");
-    start = GLMY_TimePrecProcessNow();
     GLMY_HashMap* map = GLMY_HashMapCreate(7, &GLMY_HashMapHashStringDefault, &GLMY_HashMapCmpStringDefault);
     if(!map) 
     {
         printf("Error: Could not create map.\n");
         fails += 1;
     }
-    end = GLMY_TimePrecProcessNow();
-    printf("Result: %fms\n\n", GLMY_TimePrecToMilliseconds(GLMY_TimePrecDiff(start, end)));
    
     //////////////////////////
     // Insert 
     GLMY_TestSubSection("Insert");
-    start = GLMY_TimePrecProcessNow();
-
     size_t c = 0;
     for(; c < map->capacity; c++)
     {
@@ -46,28 +41,37 @@ int GLMY_Test_HashMap()
             fails += 1;
         }
     }
-
-    end = GLMY_TimePrecProcessNow();
-    printf("Result: %fms\n\n", GLMY_TimePrecToMilliseconds(GLMY_TimePrecDiff(start, end)));
     
     //////////////////////////
     // Get 
     GLMY_TestSubSection("Get");
-    start = GLMY_TimePrecProcessNow();
     GLMY_Pair pair = GLMY_HashMapGet(map, key[0]);
     if(!pair.key && strcmp(value, pair.value) != 0) 
     {
         printf("Error: Could not get (key: %s)\n", key[0]);
         fails += 1;
     }
-    end = GLMY_TimePrecProcessNow();
-    printf("Result: %fms\n\n", GLMY_TimePrecToMilliseconds(GLMY_TimePrecDiff(start, end)));
 
     //////////////////////////
     // Erase
+    GLMY_TestSubSection("Erase");
+    GLMY_Pair eraseRes = GLMY_HashMapErase(map, key[0]);
+    if(!eraseRes.key || strcmp(value, eraseRes.value) != 0)
+    {
+        printf("Error: Could not erase (key: %s)\n", key[0]);
+        fails += 1;
+    }
 
-    // TODO
-     
+
+    //////////////////////////
+    // Resize
+    GLMY_TestSubSection("Resize");
+    bool resized = GLMY_HashMapResize(map, 120);
+    if(!resized || map->capacity != 120)
+    {
+        printf("Error: Could not resize map (newSize: %d)\n", 120);
+        fails += 1;
+    }
 
     GLMY_HashMapDelete(map);
 

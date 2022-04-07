@@ -165,5 +165,38 @@ GLMY_HashMapBucket* GLMY_HashMapAt(GLMY_HashMap* map, size_t index)
     return &map->buckets[index];
 }
 
+bool GLMY_HashMapResize(GLMY_HashMap* map, size_t newSize)
+{
+    GLMY_HashMapBucket* newBuckets = (GLMY_HashMapBucket*)calloc(sizeof(GLMY_HashMapBucket), newSize);
+    if(newBuckets == NULL)
+        return false;
+
+    size_t index = 0;
+    for(; index < map->capacity; index++)
+    {
+        GLMY_HashMapBucket* bucket = GLMY_HashMapAt(map, index);
+        if(bucket->key == NULL)
+            continue;
+
+        size_t  pindex = 0,
+                probeIndex = GLMY_HashMapCalcProbeIndex(bucket->hash, pindex, newSize);
+
+        while(map->cmpKey(newBuckets[probeIndex].key, bucket->key))
+        {
+            if((pindex += 1) >= newSize)
+                return false;
+
+            probeIndex = GLMY_HashMapCalcProbeIndex(bucket->hash, pindex,  map->capacity);
+        }
+
+        memcpy(&newBuckets[probeIndex], bucket, sizeof(GLMY_HashMapBucket));
+    }
+
+    free(map->buckets);
+    map->buckets = newBuckets;
+    map->capacity = newSize;
+
+    return true;
+}
 
 

@@ -26,6 +26,7 @@ GLMY_App* GLMY_AppInit()
         NULL,
         NULL
     );
+
     if(!app->window->instance)
     {
         GLMY_AppExit(app);
@@ -39,11 +40,14 @@ GLMY_App* GLMY_AppInit()
 
 void GLMY_AppExit(GLMY_App* app)
 {
-    if(app && app->window && app->window->instance)
+    if(app)
     {
-        glfwDestroyWindow(app->window->instance);
-        free(app->window);
-        app->window = NULL;
+        if(app->window && app->window->instance)
+        {
+            glfwDestroyWindow(app->window->instance);
+            free(app->window);
+            app->window = NULL;
+        }
         
         free(app);
         app = NULL;

@@ -45,4 +45,6 @@ GLMY_Pair GLMY_HashMapErase(GLMY_HashMap* map, void* key);
 
 GLMY_HashMapBucket* GLMY_HashMapAt(GLMY_HashMap* map, size_t index);
 
+bool GLMY_HashMapResize(GLMY_HashMap* map, size_t newSize);
+
 #endif
